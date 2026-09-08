@@ -15,15 +15,16 @@ SCALER_PATH = PROJECT_ROOT / "models" / "scaler.pkl"
 
 def print_banner(title):
     border = "+" + "=" * 52 + "+"
-    print(border)
+    print(f"\n{border}")
     print(f"| {title:^50} |")
     print(border)
 
 
 def probability_bar(probability, width=30):
     filled = round(probability * width)
-    return "[" + "#" * filled + "-" * (width - filled) + "]"
+    empty = width - filled
 
+    return "█" * filled + "░" * empty
 
 def print_feature_comparison(team1, team2, matchup_features):
     print("\nFeature advantages (positive values favor Team 1)")
@@ -46,46 +47,46 @@ def main():
 
 
     teams = [
-    "Argentina",
-    "Belgium",
-    "Brazil",
-    "Bulgaria",
-    "Canada",
-    "China",
-    "Cuba",
-    "France",
-    "Germany",
-    "Iran",
-    "Italy",
-    "Japan",
-    "Poland",
-    "Serbia",
-    "Slovenia",
-    "Türkiye",
-    "Ukraine",
-    "United States",
+        "argentina",
+        "belgium",
+        "brazil",
+        "bulgaria",
+        "canada",
+        "china",
+        "cuba",
+        "france",
+        "germany",
+        "iran",
+        "italy",
+        "japan",
+        "poland",
+        "serbia",
+        "slovenia",
+        "türkiye",
+        "ukraine",
+        "united states",
 ]
     print("Welcome to vballPredictor!")
-    print("This tool predicts the winner of a volleyball match based on historical data.")
-    print("Please choose an option:")
-    print("1. Predict a matchup")
+    print("\nThis tool predicts the winner of a volleyball match based on historical data.")
+    print("\nPlease choose an option:")
+    print("\n1. Predict a matchup")
     print("2. Run historical data processing and model training")
     choice = input("Enter 1 or 2: ")
 
     if choice == "1":
-        print("Available teams:")
+        print("\nAvailable teams:")
         for i, team in enumerate(teams, start=1):
             print(f"{i}. {team}")
 
         
         while True:
-            team1 = input("Enter the name of Team 1: ")
+            team1 = input("\nEnter the name of Team 1: ").strip().lower()
             if team1 in teams:
                 break
             print(f"Team {team1} is not in the list of available teams. Try again.")
 
         while True:
-            team2 = input("Enter the name of Team 2: ")
+            team2 = input("\nEnter the name of Team 2: ").strip().lower()
             if team2 in teams:
                 break
             print(f"Team {team2} is not in the list of available teams. Try again.")
@@ -98,7 +99,7 @@ def main():
 
 
 def matchup(team1, team2):
-    print_banner(f"{team1} vs {team2}")
+    print_banner(f"🏐 {team1} vs {team2} 🏐")
     print("Building matchup from recent team history...\n")
 
     df = features.FeatureEngineer().build_features()
@@ -122,7 +123,7 @@ def matchup(team1, team2):
 
     print(f"Predicted winner: {winner}")
     print(f"\n{team1:<18} {probability_bar(team1_confidence)} {team1_confidence:>6.1%}")
-    print(f"{team2:<18} {probability_bar(team2_confidence)} {team2_confidence:>6.1%}")
+    print(f"\n{team2:<18} {probability_bar(team2_confidence)} {team2_confidence:>6.1%}")
     print(f"\nModel decision score: {decision_score:.3f}")
     print_feature_comparison(team1, team2, matchup_features)
 

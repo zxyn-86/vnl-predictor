@@ -29,6 +29,9 @@ class DataPreprocessor:
 		data = data.drop(columns=columns_to_drop, errors="ignore")
 		data["Season"] = data["Season"].replace("Men", "2025")
 		data["Y/M/D"] = pd.to_datetime(data["Y/M/D"], format="%Y/%m/%d")
+		data[["Team", "VS_Team"]] = data[["Team", "VS_Team"]].apply(
+			lambda column: column.str.strip().str.lower()
+		)
 
 		# filling blanks as not all matches go to 4 or 5 sets
 		point_columns = [
@@ -85,6 +88,8 @@ class DataPreprocessor:
 			(data["BLOCK_Point"] - data["BLOCK_Errors"]) / data["BLOCK_Touches"],
 			np.nan,
 		)
+
+		
 
 		return data.sort_values(["Y/M/D", "Match_ID"]).reset_index(drop=True)
 
